@@ -1,20 +1,22 @@
 # huggingface_api.py
 
 from huggingface_hub import InferenceClient
-from dotenv import load_dotenv
-import os
+import streamlit as st
 
-load_dotenv()
-HF_TOKEN = st.secrets["HUGGINGFACE_API_TOKEN"]
-
-client = InferenceClient(
-    provider="hyperbolic",
-    api_key=HF_TOKEN,
-)
-
+def get_client():
+    HF_TOKEN = st.secrets["HUGGINGFACE_API_TOKEN"]
+    return InferenceClient(provider="hyperbolic", api_key=HF_TOKEN)
 
 def query(message: str, style: str):
-    prompt = f"Finish this rap in {style} style: {message}"
+    client = get_client()
+    prompt = (
+        "You are a rap battle MC. Only respond with raw rap lyrics, without any explanations, analysis, or labels like 'Verse 1' or 'Chorus'. "
+        "Do not repeat the user input. Continue this line in a consistent rhyme and flow, using the specified style.\n\n"
+        f"User line: \"{message}\"\n"
+        f"Style: {style}\n\n"
+        "Now generate 4 more rap lines:"
+    )
+
     try:
         completion = client.chat.completions.create(
             model="deepseek-ai/DeepSeek-R1",

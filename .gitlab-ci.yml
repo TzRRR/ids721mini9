@@ -1,0 +1,15 @@
+stages:
+  - imcryingtearsofsadness
+# stage
+imcryingtearsofsadness:
+  image: python:3.11-slim
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y curl jq wget xz-utils build-essential
+  stage: imcryingtearsofsadness
+  # script
+  script:
+    - make install
+    - make lint
+    - make format
+    - make test

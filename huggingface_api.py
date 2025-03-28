@@ -12,6 +12,7 @@ client = InferenceClient(
     api_key=HF_TOKEN,
 )
 
+
 def query(message: str, style: str):
     prompt = f"Finish this rap in {style} style: {message}"
     try:
